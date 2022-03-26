@@ -3,7 +3,7 @@ def move_element_to_end(original_array, to_move):
     end_idx = len(original_array) - 1
 
     while start_idx < end_idx:
-        while end_idx == to_move:
+        while start_idx < end_idx and array[end_idx] == to_move:
             end_idx -= 1
         if original_array[start_idx] == to_move:
             original_array[start_idx], original_array[end_idx] = original_array[end_idx], original_array[start_idx]
