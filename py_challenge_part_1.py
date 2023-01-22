@@ -49,6 +49,70 @@ def calc_perfect_num(max_exclussive):
             result.append(num)
     return result
 
+def calc_prime_up_to(max_number):
+    #This the first way to calculate prime list up to a given number.
+    if max_number < 1:
+        return []
+    result = []
+    for num in range(2,max_number + 1):
+        if is_prime(num) :
+            result.append(num)
+    return result
+
+def is_prime(number):
+    for num in range(2,number):
+        if number % num == 0:
+            return  False
+    return True
+
+def calc_prime_up_to_v2(max_value):
+    # V2 to calculate prime list up to a given number
+    # Step 1: Initially mark all value as potentially prime number
+    is_potentially_prime = [True for _ in range(1,max_value+2)]
+    # Optimize the list from 2 up to half of is_potentially_prime
+    for num in range(2, max_value//2 + 1):
+        if is_potentially_prime[num]:
+            erase_multiple_of_current(is_potentially_prime,num)
+    return buld_primes_list(is_potentially_prime)
+
+def erase_multiple_of_current(values_list, number):
+    for idx in range(number + number, len(values_list), number):
+        values_list[idx] = False
+
+def buld_primes_list(is_potentially_prime):
+    primes = []
+    for num in range(2,len(is_potentially_prime)):
+        if is_potentially_prime[num]:
+            primes.append(num)
+    return primes
+
+def input_and_expected(): return [(2, [2]),
+            (3, [2, 3]),
+            (10, [2, 3, 5, 7]),
+            (15, [2, 3, 5, 7, 11, 13]),
+            (20, [2, 3, 5, 7, 11, 13, 17, 19]),
+            (25, [2, 3, 5, 7, 11, 13, 17, 19, 23]),
+            (50, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47])]
+
+@pytest.mark.parametrize("n, expected",
+                         input_and_expected())
+def test_calc_primes_up_to(n, expected): assert calc_prime_up_to(n) == expected
+@pytest.mark.parametrize("n, expected",
+                         input_and_expected())
+def test_calc_primes_up_to_v2(n, expected): assert calc_prime_up_to_v2(n) == expected
+
+@pytest.mark.parametrize("n,expected",[(2,True),
+                                       (11,True),
+                                       (6,False)])
+
+def test_is_prime(n,expected):
+    assert is_prime(n) == expected
+
+@pytest.mark.parametrize("n,expected",[(15,[2,3,5,7,11,13]),
+                                       (25, [2,3,5,7,11,13,17,19,23])])
+def test_calc_prime_up_to(n,expected):
+    assert calc_prime_up_to(n) == expected
+
 
 @pytest.mark.parametrize("n,expected",
                          [(6, True),
